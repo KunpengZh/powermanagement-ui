@@ -1,0 +1,38 @@
+.fullHeight{
+    height: 100%;
+}
+.nineHeight{
+    height: 90%;
+}
+body {
+    background-color: rgb(231, 249, 255);
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+}
+html{
+    height: 100%;
+}
+.agGridWarrp{
+    height: 90%;
+}
+
+.agGridWarrp85{
+    height: 85%;
+}
+
+.agGridWarrp80{
+    height: 80%;
+}
+
+.removeMarginLeftRigth{
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+.removeMarginLeft{
+    margin-left: 0 !important;
+}
+.removeMarginRigth{
+    margin-right: 0 !important;
+}
