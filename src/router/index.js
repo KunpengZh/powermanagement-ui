@@ -2,8 +2,10 @@ import Vue from "vue";
 import Router from "vue-router";
 import DataUpload from "@/components/DataUpload";
 import HomeLayout from "@/components/HomeLayout";
-import CustomerProfile from "@/components/CustomerProfile"
-import CustomerData from "@/components/CustomerData"
+import CustomerProfile from "@/components/CustomerProfile";
+import CustomerData from "@/components/CustomerData";
+import CustomerProfileNew from "@/components/CustomerProfileNew";
+import CustomerDataNew from "@/components/CustomerDataNew"
 Vue.use(Router);
 
 export default new Router({
@@ -32,6 +34,16 @@ export default new Router({
                 path: "customerdata",
                 name: "customerdata",
                 component: CustomerData
+            },
+            {
+                path: "customerprofilenew",
+                name: "customerprofilenew",
+                component: CustomerProfileNew
+            },
+            {
+                path: "customerdatanew",
+                name: "customerdatanew",
+                component: CustomerDataNew
             }
         ]
     },

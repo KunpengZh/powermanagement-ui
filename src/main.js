@@ -28,13 +28,147 @@ var store = new Vuex.Store({
             },
             {
                 headerName: '客户名称',
-                field: "cusomerName",
+                field: "customerName",
                 width: 150,
                 editable: true
             },
             {
                 headerName: '客户地址',
-                field: "cusomerAddress",
+                field: "customerAddress",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '合同容量',
+                field: "contactCapacity",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '并网电压',
+                field: "bingwangDianya",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '客户类别',
+                field: "customerCategory",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '发电方式',
+                field: "customerFadianFangshi",
+                width: 150,
+            },
+            {
+                headerName: '消纳方式',
+                field: "saleCategory",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '接入方式',
+                field: "customerJieruFangshi",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '市公司名称',
+                field: "shiCompanyName",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '县公司名称',
+                field: "xianCompanyName",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '供电单位名称',
+                field: "gongdianDanweiName",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '组织名称',
+                field: "orgNo",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '申请单号',
+                field: "requestFormId",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '身份证号',
+                field: "identifyNumber",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '银行名称',
+                field: "bankName",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '银行帐号',
+                field: "bankAccount",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '并网时间',
+                field: "bingwangTime",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '并网方式',
+                field: "bingwangFangshi",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '补助方式',
+                field: "buzhuModel",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '档案税率',
+                field: "danganShuilv",
+                width: 150,
+                editable: true
+            }
+        ],
+        customerProfileNewColDefs: [
+            {
+                headerName: 'ItemNo',
+                field: "indexid",
+                width: 150,
+                editable: false,
+                checkboxSelection: true
+            },
+            {
+                headerName: '客户编号',
+                field: "customerId",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '客户名称',
+                field: "customerName",
+                width: 150,
+                editable: true
+            },
+            {
+                headerName: '客户地址',
+                field: "customerAddress",
                 width: 150,
                 editable: true
             },
@@ -149,7 +283,7 @@ var store = new Vuex.Store({
         customerDataColDefs: [
             {headerName: 'ItemNo', field: "indexid", width: 150, editable: false,checkboxSelection: true},
             {headerName: '客户编号', field: "customerId", width: 150, editable: true},
-            {headerName: '客户名称', field: "cusomerName", width: 150, editable: true},
+            {headerName: '客户名称', field: "customerName", width: 150, editable: true},
             {headerName: '电费年月', field: "datePeriod", width: 150, editable: true},
             {headerName: '批次号', field: "picihao", width: 150, editable: true},
             {headerName: '单位名称', field: "danwei", width: 150, editable: true},

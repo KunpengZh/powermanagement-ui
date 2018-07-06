@@ -4,12 +4,31 @@
             <div slot="header" class="clearfix" style="text-align: left">
                 <span>客户发电数据</span>
             </div>
-            <el-button-group style="padding-bottom: 10px; width: 100%; padding-left: 10px;">
-                <el-button type="primary" icon="el-icon-circle-plus" @click="handleCreatNewCustomerData">新建</el-button>
-                <el-button type="primary" icon="el-icon-remove" @click="handleDelete">删除</el-button>
-                <el-button type="primary" icon="el-icon-upload" @click="handleDataSave">保存</el-button>
-            </el-button-group>
-
+            <div style="display: flex; justify-content: flex-start">
+                <el-button-group>
+                    <el-button size="small" type="primary" icon="el-icon-circle-plus" @click="handleCreatNewCustomerData">新建</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-remove" @click="handleDelete">删除</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-upload" @click="handleDataSave">保存</el-button>
+                </el-button-group>
+                <div>
+                    <el-date-picker
+                            v-model="query.datePeriod"
+                            type="daterange"
+                            size="small"
+                            class="queryInput"
+                            range-separator="至"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期">
+                    </el-date-picker>
+                    <el-button-group style="padding-bottom: 10px;  padding-left: 10px;">
+                        <el-button size="small" type="primary" icon="el-icon-upload" @click="handleQueryData" style="margin-right:30px;">查询</el-button>
+                    </el-button-group>
+                </div>
+                <div>
+                    <el-input v-model="query.customerId" placeholder="客户编号" :clearable="true" size="small" class="queryInput" @input="handleFilterChange"></el-input>
+                    <el-input v-model="query.customerName" placeholder="客户名称" :clearable="true" size="small" class="queryInput" @input="handleFilterChange"></el-input>
+                </div>
+            </div>
             <div class="agGridWarrp80">
                 <ag-grid-vue style="width: 100%; height: 100%; text-align: left" class="ag-theme-balham"
                              :gridOptions="gridOptions"
@@ -30,7 +49,7 @@
                     <el-input v-model="customerDataForm.customerId" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户名称" :label-width="formLabelWidth">
-                    <el-input v-model="customerDataForm.cusomerName" auto-complete="off"></el-input>
+                    <el-input v-model="customerDataForm.customerName" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="电费年月" :label-width="formLabelWidth">
                     <el-input v-model="customerDataForm.datePeriod" auto-complete="off"></el-input>
@@ -183,10 +202,18 @@
         name: "RightMonthCom",
         data() {
             return {
+                query: {
+                    datePeriod: [],
+                    customerId: '',
+                    customerName: '',
+                    startPeriod: '',
+                    endPeriod: ''
+                },
                 newCreateCustomerDataVisible: false,
                 gridOptions: {},
                 columnDefs: this.$store.state.customerDataColDefs,
                 rowData: [],
+                sourceData:[],
                 updatedRowData: [],
                 formLabelWidth: "180px",
                 customerDataForm: {}
@@ -196,6 +223,30 @@
             'ag-grid-vue': AgGridVue
         },
         methods: {
+            handleQueryData() {
+                this.query.startPeriod = this.query.datePeriod[0];
+                this.query.endPeriod = this.query.datePeriod[1];
+                this.loadingSupplierData();
+            },
+            handleFilterChange() {
+                const newRowData = [];
+                let that = this;
+                this.sourceData.forEach(function (item) {
+                    if (that.query.customerId !== "") {
+                        if (!item.customerId.includes(that.query.customerId)) {
+                            return false;
+                        }
+                    }
+                    if (that.query.customerName !== "") {
+                        if (!(null !== item.customerName && item.customerName.includes(that.query.customerName))) {
+                            return false;
+                        }
+                    }
+                    newRowData.push(item);
+
+                });
+                this.rowData = newRowData;
+            },
             uploadNewCustomerData() {
                 if (this.customerDataForm.customerId && this.customerDataForm.customerId !== '') {
                     this.$http.post("/customerdata/createCustomerData", JSON.stringify(this.customerDataForm)).then(res => {
@@ -231,19 +282,15 @@
                 })
             },
             cellValueChanged(param) {
-                let newRowData;
                 let existAlready = false;
                 for (let i = 0; i < this.updatedRowData.length; i++) {
                     if (this.updatedRowData[i].indexid === param.data.indexid) {
-                        newRowData = this.updatedRowData.slice(0, i).concat(this.updatedRowData[i + 1]);
-                        newRowData.push(param.data);
+                        this.updatedRowData[i] = param.data;
                         existAlready = true;
                         break;
                     }
                 }
-                if (existAlready) {
-                    this.updatedRowData = newRowData;
-                } else {
+                if (!existAlready) {
                     this.updatedRowData.push(param.data);
                 }
             },
@@ -270,13 +317,22 @@
                 const selectedData = selectedNodes.map(node => node.data);
                 return selectedData;
 
+            },
+            loadingSupplierData() {
+                this.$http.post("/customerdata/getCustomerData", JSON.stringify(this.query)).then(res => {
+                    res = res.body;
+                    this.rowData = res;
+                    this.sourceData = this.rowData;
+                });
             }
         },
         beforeMount() {
-            this.$http.post("/customerdata/getCustomerData", "{}").then(res => {
-                res = res.body;
-                this.rowData = res;
-            });
+            let startPeriod = new Date();
+            let endPeriod = new Date();
+            startPeriod.setMonth(startPeriod.getMonth() - 3);
+            this.query.startPeriod = startPeriod;
+            this.query.endPeriod = endPeriod;
+            this.loadingSupplierData();
         }
     };
 </script>

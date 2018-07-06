@@ -4,12 +4,16 @@
             <div slot="header" class="clearfix" style="text-align: left">
                 <span>客户基础档案</span>
             </div>
-            <el-button-group style="padding-bottom: 10px; width: 100%; padding-left: 10px;">
-                <el-button type="primary" icon="el-icon-circle-plus" @click="handleCreatNewProfile">新建</el-button>
-                <el-button type="primary" icon="el-icon-remove" @click="handleDelete">删除</el-button>
-                <el-button type="primary" icon="el-icon-upload" @click="handleDataSave">保存</el-button>
-            </el-button-group>
-
+            <div style="display: flex; justify-content: flex-start">
+                <el-button-group style="padding-bottom: 10px; padding-left: 10px;">
+                    <el-button size="small" type="primary" icon="el-icon-circle-plus" @change="handleCreatNewProfile">新建</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-remove" @change="handleDelete">删除</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-upload" @change="handleDataSave">保存</el-button>
+                </el-button-group>
+                <el-input v-model="query.customerId" placeholder="客户编号" :clearable="true" size="small" class="queryInput" @input="handleFilterChange"></el-input>
+                <el-input v-model="query.customerName" placeholder="客户名称" :clearable="true" size="small" class="queryInput" @input="handleFilterChange"></el-input>
+                <el-input v-model="query.identifyNumber" placeholder="身份证号码" :clearable="true" size="small" class="queryInput" @input="handleFilterChange"></el-input>
+            </div>
             <div class="agGridWarrp80">
                 <ag-grid-vue style="width: 100%; height: 100%; text-align: left" class="ag-theme-balham"
                              :gridOptions="gridOptions"
@@ -30,7 +34,7 @@
                     <el-input v-model="customerProfileForm.customerId" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户名称" :label-width="formLabelWidth">
-                    <el-input v-model="customerProfileForm.cusomerName" auto-complete="off"></el-input>
+                    <el-input v-model="customerProfileForm.customerName" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="身份证号" :label-width="formLabelWidth">
                     <el-input v-model="customerProfileForm.identifyNumber" auto-complete="off"></el-input>
@@ -42,7 +46,7 @@
                     <el-input v-model="customerProfileForm.bankName" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="客户地址" :label-width="formLabelWidth">
-                    <el-input v-model="customerProfileForm.cusomerAddress" auto-complete="off"></el-input>
+                    <el-input v-model="customerProfileForm.customerAddress" auto-complete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="并网电压" :label-width="formLabelWidth">
                     <el-input v-model="customerProfileForm.bingwangDianya" auto-complete="off"></el-input>
@@ -105,10 +109,16 @@
         name: "RightMonthCom",
         data() {
             return {
+                query: {
+                    customerId: '',
+                    customerName: '',
+                    identifyNumber: ''
+                },
                 newCreateCustomerProfileVisible: false,
                 gridOptions: {},
                 columnDefs: this.$store.state.customerProfileColDefs,
                 rowData: [],
+                sourceData: [],
                 updatedRowData: [],
                 formLabelWidth: "120px",
                 customerProfileForm: {}
@@ -118,6 +128,32 @@
             'ag-grid-vue': AgGridVue
         },
         methods: {
+            handleFilterChange() {
+                const newRowData = [];
+                let that = this;
+                this.sourceData.forEach(function (item) {
+                    if (that.query.customerId !== "") {
+                        if (!item.customerId.includes(that.query.customerId)) {
+                            return false;
+                        }
+                    }
+                    if (that.query.customerName !== "") {
+                        if (!(null!==item.customerName && item.customerName.includes(that.query.customerName))) {
+                            return false;
+                        }
+                    }
+
+                    if (that.query.identifyNumber !== "") {
+                        if (!(null!==item.identifyNumber && item.identifyNumber.includes(that.query.identifyNumber))) {
+                            return false;
+                        }
+                    }
+
+                    newRowData.push(item);
+
+                });
+                this.rowData = newRowData;
+            },
             uploadNewCustomerProfile() {
                 if (this.customerProfileForm.customerId && this.customerProfileForm.customerId !== '') {
                     this.$http.post("/customerprofile/createCustomerProfile", JSON.stringify(this.customerProfileForm)).then(res => {
@@ -153,19 +189,15 @@
                 })
             },
             cellValueChanged(param) {
-                let newRowData;
                 let existAlready = false;
                 for (let i = 0; i < this.updatedRowData.length; i++) {
-                    if (this.updatedRowData[i].customerId === param.data.customerId) {
-                        newRowData = this.updatedRowData.slice(0, i).concat(this.updatedRowData[i + 1]);
-                        newRowData.push(param.data);
+                    if (this.updatedRowData[i].indexid === param.data.indexid) {
+                        this.updatedRowData[i] = param.data;
                         existAlready = true;
                         break;
                     }
                 }
-                if (existAlready) {
-                    this.updatedRowData = newRowData;
-                } else {
+                if (!existAlready) {
                     this.updatedRowData.push(param.data);
                 }
             },
@@ -198,6 +230,7 @@
             this.$http.post("/customerprofile/getCustomerProfile", "{}").then(res => {
                 res = res.body;
                 this.rowData = res;
+                this.sourceData = this.rowData;
             });
         }
     };
@@ -207,5 +240,7 @@
         height: 100% !important;
         padding-top: 10px !important;
     }
+
+
 </style>
 

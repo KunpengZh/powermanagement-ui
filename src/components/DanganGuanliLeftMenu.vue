@@ -20,11 +20,11 @@
                 nonActiveMenuClass: 'list-group-item',
                 activeMenu: 0,
                 leftMenus: [
-                    {text: '客户档案', value: 'CustomerProfile'},
+                    {text: '客户档案', value: 'customerprofile'},
                     {text: '发电数据', value: 'CustomerData'},
-                    {text: '新增客户', value: 'NewCustomerProfile'},
-                    {text: '无档案数据', value: 'CustomerDataWithoutProfile'},
-                    {text: '档案上传', value: 'DataUpload'}
+                    {text: '新增客户', value: 'customerprofilenew'},
+                    {text: '无档案数据', value: 'customerdatanew'},
+                    {text: '档案上传', value: 'dataupload'}
                 ]
             }
         },
@@ -39,10 +39,10 @@
                         this.$router.push("/home/customerdata");
                         break;
                     case 2:
-                        this.$router.push("/home/newcustomerprofile");
+                        this.$router.push("/home/customerprofilenew");
                         break;
                     case 3:
-                        this.$router.push("/home/customerdatawithoutprofile");
+                        this.$router.push("/home/customerdatanew");
                         break;
                     case 4:
                         this.$router.push("/home/dataupload");
