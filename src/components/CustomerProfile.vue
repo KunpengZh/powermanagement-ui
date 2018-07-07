@@ -6,9 +6,10 @@
             </div>
             <div style="display: flex; justify-content: flex-start">
                 <el-button-group style="padding-bottom: 10px; padding-left: 10px;">
-                    <el-button size="small" type="primary" icon="el-icon-circle-plus" @change="handleCreatNewProfile">新建</el-button>
-                    <el-button size="small" type="primary" icon="el-icon-remove" @change="handleDelete">删除</el-button>
-                    <el-button size="small" type="primary" icon="el-icon-upload" @change="handleDataSave">保存</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-circle-plus" @click="handleCreatNewProfile">新建</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-remove" @click="handleDelete">删除</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-upload" @click="handleDataSave">保存</el-button>
+                    <el-button size="small" type="primary" icon="el-icon-upload" @click="handleExport">保存</el-button>
                 </el-button-group>
                 <el-input v-model="query.customerId" placeholder="客户编号" :clearable="true" size="small" class="queryInput" @input="handleFilterChange"></el-input>
                 <el-input v-model="query.customerName" placeholder="客户名称" :clearable="true" size="small" class="queryInput" @input="handleFilterChange"></el-input>
@@ -128,6 +129,9 @@
             'ag-grid-vue': AgGridVue
         },
         methods: {
+            handleExport() {
+                this.Utils.jsonToExcel("customerProfile.xlsx", "customerProfile", this.rowData);
+            },
             handleFilterChange() {
                 const newRowData = [];
                 let that = this;
@@ -138,13 +142,13 @@
                         }
                     }
                     if (that.query.customerName !== "") {
-                        if (!(null!==item.customerName && item.customerName.includes(that.query.customerName))) {
+                        if (!(null !== item.customerName && item.customerName.includes(that.query.customerName))) {
                             return false;
                         }
                     }
 
                     if (that.query.identifyNumber !== "") {
-                        if (!(null!==item.identifyNumber && item.identifyNumber.includes(that.query.identifyNumber))) {
+                        if (!(null !== item.identifyNumber && item.identifyNumber.includes(that.query.identifyNumber))) {
                             return false;
                         }
                     }

@@ -5,7 +5,7 @@
                 <span>新增发电客户数据</span>
             </div>
             <el-button-group style="padding-bottom: 10px; width: 100%; padding-left: 10px;">
-                <el-button size="small" type="primary" icon="el-icon-circle-plus" @click="moveToCustomerData">移送正式客户档案</el-button>
+                <el-button size="small" type="primary" icon="el-icon-circle-plus" @click="moveToCustomerData">移送正式客户数据</el-button>
                 <el-button size="small" type="primary" icon="el-icon-remove" @click="handleDelete">删除</el-button>
                 <el-button size="small" type="primary" icon="el-icon-upload" @click="handleDataSave">保存</el-button>
             </el-button-group>

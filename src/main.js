@@ -1,5 +1,13 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+Date.prototype.toJSON = function () {
+    let Year = this.getFullYear();
+    let month = this.getMonth() + 1;
+    month = month < 10 ? "0" + month : month;
+    let day = this.getDate();
+    day = day < 10 ? "0" + day : day;
+    return Year + "-" + month + "-" + day;
+};
 import Vue from "vue";
 import Vuex from "vuex";
 import App from "./App";
@@ -11,10 +19,12 @@ import "ag-grid/dist/styles/ag-theme-balham.css";
 import "./css/oneUI.css"
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
+import Utils from "@/components/Utils.js";
 
 Vue.use(VueResource);
 Vue.use(Vuex);
 Vue.use(ElementUI);
+Vue.prototype.Utils = Utils;
 
 var store = new Vuex.Store({
     state: {
@@ -281,7 +291,7 @@ var store = new Vuex.Store({
             }
         ],
         customerDataColDefs: [
-            {headerName: 'ItemNo', field: "indexid", width: 150, editable: false,checkboxSelection: true},
+            {headerName: 'ItemNo', field: "indexid", width: 150, editable: false, checkboxSelection: true},
             {headerName: '客户编号', field: "customerId", width: 150, editable: true},
             {headerName: '客户名称', field: "customerName", width: 150, editable: true},
             {headerName: '电费年月', field: "datePeriod", width: 150, editable: true},

@@ -9,8 +9,8 @@
                 background-color="#545c64"
                 text-color="#fff"
                 active-text-color="#ffd04b">
-            <el-menu-item index="1">客户档案管理</el-menu-item>
-            <el-menu-item index="2">客户数据管理</el-menu-item>
+            <el-menu-item index="1">客户数据管理</el-menu-item>
+            <el-menu-item index="2">报告报表管理</el-menu-item>
         </el-menu>
     </div>
 </template>
@@ -23,8 +23,15 @@
             }
         },
         methods:{
-            handleSelect(){
-
+            handleSelect(index){
+                switch (index){
+                    case '1':
+                        this.$router.push("/home/customerprofile");
+                        break;
+                    case '2':
+                        this.$router.push("/report/");
+                        break;
+                }
             }
         }
     };

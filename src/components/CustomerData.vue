@@ -213,7 +213,7 @@
                 gridOptions: {},
                 columnDefs: this.$store.state.customerDataColDefs,
                 rowData: [],
-                sourceData:[],
+                sourceData: [],
                 updatedRowData: [],
                 formLabelWidth: "180px",
                 customerDataForm: {}
@@ -224,9 +224,9 @@
         },
         methods: {
             handleQueryData() {
-                this.query.startPeriod = this.query.datePeriod[0];
-                this.query.endPeriod = this.query.datePeriod[1];
-                this.loadingSupplierData();
+                this.query.startPeriod = this.Utils.dateToStr(this.query.datePeriod[0]);
+                this.query.endPeriod = this.Utils.dateToStr(this.query.datePeriod[1]);
+                this.loadingCustomerData();
             },
             handleFilterChange() {
                 const newRowData = [];
@@ -318,7 +318,9 @@
                 return selectedData;
 
             },
-            loadingSupplierData() {
+            loadingCustomerData() {
+                console.log(this.query);
+                console.log(JSON.stringify(this.query));
                 this.$http.post("/customerdata/getCustomerData", JSON.stringify(this.query)).then(res => {
                     res = res.body;
                     this.rowData = res;
@@ -332,7 +334,7 @@
             startPeriod.setMonth(startPeriod.getMonth() - 3);
             this.query.startPeriod = startPeriod;
             this.query.endPeriod = endPeriod;
-            this.loadingSupplierData();
+            this.loadingCustomerData();
         }
     };
 </script>
