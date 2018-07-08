@@ -7,7 +7,11 @@ import CustomerData from "@/components/CustomerData";
 import CustomerProfileNew from "@/components/CustomerProfileNew";
 import CustomerDataNew from "@/components/CustomerDataNew"
 import ReportLayout from "@/components/ReportLayout"
-import ButieTongjiYuebao from "@/components/ButieTongjiYueBao"
+import YingfuButieTongjiYuebao from "@/components/YingfuButieTongjiYueBao"
+import ButieTongji from "@/components/ButieTongji"
+import FadianYichang from "@/components/FadianYichang"
+import ByBankName from "@/components/Reports/ByBankName"
+import XiaonaFangshi from "@/components/Reports/ByXiaonaFangshi"
 Vue.use(Router);
 
 export default new Router({
@@ -55,11 +59,30 @@ export default new Router({
             component: ReportLayout,
             children: [
                 {
-                    path:"butietongjiyuebao",
-                    name:"butietongjiyuebao",
-                    component:ButieTongjiYuebao
+                    path: "yingfubutietongjiyuebao",
+                    name: "yingfubutietongjiyuebao",
+                    component: YingfuButieTongjiYuebao
+                },
+                {
+                    path: "butietongji",
+                    name: "butietongji",
+                    component: ButieTongji
+                },
+                {
+                    path: "fadianyichang",
+                    name: "fadianyichang",
+                    component: FadianYichang
+                },
+                {
+                    path: "sumbybank",
+                    name: "sumbybank",
+                    component: ByBankName
+                },
+                {
+                    path: "sumbyxiaonafangshi",
+                    name: "sumbyxiaonafangshi",
+                    component: XiaonaFangshi
                 }
-
             ]
         }
     ]

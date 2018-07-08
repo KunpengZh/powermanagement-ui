@@ -2,12 +2,18 @@
     <div style="margin-left: 20px; height: 100%">
         <el-card class="box-card" style="height: 100%;">
             <div slot="header" class="clearfix" style="text-align: left">
-                <span>补贴统计月报告</span>
+                <span>按消纳方式统计</span>
             </div>
             <div style="display: flex; justify-content: flex-start">
-                <el-select v-model="query.danwei" placeholder="单位名称" size="small">
+                <el-select
+                        size="small"
+                        v-model="query.xiaonaFangshi"
+                        multiple
+                        collapse-tags
+                        style="margin-left: 20px;"
+                        placeholder="请选择消纳方式">
                     <el-option
-                            v-for="item in danWeiOptions"
+                            v-for="item in xiaonaFangshiOptions"
                             :key="item.value"
                             :label="item.text"
                             :value="item.value">
@@ -57,12 +63,12 @@
     import {AgGridVue} from "ag-grid-vue";
 
     export default {
-        name: "ButieTongjiYuebao",
+        name: "ByBankName",
         data() {
             return {
                 query: {
                     datePeriod: [],
-                    danwei: '',
+                    xiaonaFangshi: [],
                     startPeriod: '',
                     endPeriod: ''
                 },
@@ -99,6 +105,30 @@
                     {
                         headerName: '合同容量',
                         field: "contactCapacity",
+                        width: 150,
+                        editable: false
+                    },
+                    {
+                        headerName: '银行帐号',
+                        field: "bankAccount",
+                        width: 150,
+                        editable: false
+                    },
+                    {
+                        headerName: '银行信息',
+                        field: "bankName",
+                        width: 150,
+                        editable: false
+                    },
+                    {
+                        headerName: '消纳方式',
+                        field: "xiaonaFangshi",
+                        width: 150,
+                        editable: false
+                    },
+                    {
+                        headerName: '发电量',
+                        field: "faDianliang",
                         width: 150,
                         editable: false
                     },
@@ -144,7 +174,7 @@
                 rowData: [],
                 sourceData: [],
                 formLabelWidth: "120px",
-                danWeiOptions: [],
+                xiaonaFangshiOptions: [],
             }
         },
         components: {
@@ -156,7 +186,7 @@
                     this.$message.error("无有数据!!");
                     return;
                 }
-                this.Utils.jsonToExcel(this.query.danwei + '发电客户应付补贴统计表.xlsx', '应付补贴统计表', this.rowData, this.columnDefs, this.query.startPeriod+'至'+this.query.endPeriod+'应付补贴合计');
+                this.Utils.jsonToExcel('消纳方式统计表.xlsx', '消纳方式统计表', this.rowData, this.columnDefs,'消纳方式统计表');
             },
             handleColDef() {
                 this.dialogColDefVisible = true;
@@ -182,20 +212,14 @@
                 this.dialogColDefVisible = false;
             },
             handleQueryData() {
-                if (this.query.danwei == "") {
-                    this.$message.error("单位为必选项!!");
-                    return;
+                if(this.query.datePeriod.length>0){
+                    this.query.startPeriod = this.query.datePeriod[0];
+                    this.query.endPeriod = this.query.datePeriod[1];
                 }
-                if (this.query.datePeriod.length <= 0) {
-                    this.$message.error("时间区间为必选项!!");
-                    return;
-                }
-                this.query.startPeriod = this.query.datePeriod[0];
-                this.query.endPeriod = this.query.datePeriod[1];
-                this.loadingCustomerData();
+                this.executeQuery();
             },
-            loadingCustomerData() {
-                this.$http.post("/customerdata/queryButtieTongjiYuebao", JSON.stringify(this.query)).then(res => {
+            executeQuery() {
+                this.$http.post("/customerdata/queryGroupByCustomerId", JSON.stringify(this.query)).then(res => {
                     res = res.body;
                     this.sourceData = res;
                     this.calculateRowData();
@@ -241,16 +265,16 @@
         },
         beforeMount() {
             this.columnDefs = this.baseColumnDefs.concat(this.availableColDefs);
-            this.$http.get('/customerdata/getAllDanwei').then(res => {
+            this.$http.get('/customerdata/getAllXiaonaFangshi').then(res => {
                 res = res.body;
-                let danWeiOptions = [];
-                res.forEach(function (danwei) {
-                    danWeiOptions.push({
-                        text: danwei,
-                        value: danwei
+                let xiaonaFangshiOptions = [];
+                res.forEach(function (xiaonaFangshi) {
+                    xiaonaFangshiOptions.push({
+                        text: xiaonaFangshi,
+                        value: xiaonaFangshi
                     })
                 });
-                this.danWeiOptions = danWeiOptions;
+                this.xiaonaFangshiOptions = xiaonaFangshiOptions;
             });
         }
     };
